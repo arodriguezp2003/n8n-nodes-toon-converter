@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Background -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#1A1A2E"/>
+
+  <!-- Left curly brace { -->
+  <path d="M18 18 C18 18 22 18 22 22 L22 28 C22 32 18 32 18 32 C18 32 22 32 22 36 L22 42 C22 46 18 46 18 46"
+        stroke="#E94560" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Right curly brace } -->
+  <path d="M46 18 C46 18 42 18 42 22 L42 28 C42 32 46 32 46 32 C46 32 42 32 42 36 L42 42 C42 46 46 46 46 46"
+        stroke="#E94560" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Arrow right (JSON → TOON) -->
+  <path d="M28 26 L36 32 L28 38" stroke="#16C79A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Three horizontal lines (TOON data representation) -->
+  <line x1="30" y1="28" x2="36" y2="28" stroke="#0F3460" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="30" y1="32" x2="36" y2="32" stroke="#0F3460" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="30" y1="36" x2="36" y2="36" stroke="#0F3460" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+</svg>
