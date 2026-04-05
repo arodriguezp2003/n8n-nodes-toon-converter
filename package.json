@@ -1,0 +1,58 @@
+{
+	"name": "n8n-nodes-toon-converter",
+	"version": "0.1.0",
+	"description": "n8n community node to convert between JSON and TOON (Token-Oriented Object Notation) — optimized for LLM token efficiency",
+	"license": "MIT",
+	"homepage": "https://github.com/arodriguezp2003/n8n-nodes-toon-converter",
+	"author": {
+		"name": "Alejandro Rodriguez",
+		"url": "https://www.linkedin.com/in/alejandrorodriguezpena/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/arodriguezp2003/n8n-nodes-toon-converter.git"
+	},
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"toon",
+		"json",
+		"token-oriented-object-notation",
+		"llm",
+		"ai",
+		"converter"
+	],
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc && gulp build:icons",
+		"dev": "tsc --watch",
+		"lint": "eslint nodes/ credentials/ --ext .ts",
+		"lint:fix": "eslint nodes/ credentials/ --ext .ts --fix",
+		"test": "vitest run",
+		"prepublishOnly": "npm run build"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"nodes": [
+			"dist/nodes/ToonConverter/ToonConverter.node.js"
+		],
+		"credentials": []
+	},
+	"devDependencies": {
+		"@types/node": "^20.0.0",
+		"@vitest/coverage-v8": "^4.1.2",
+		"gulp": "^5.0.0",
+		"n8n-workflow": "1.72.0",
+		"typescript": "~5.7.0",
+		"vitest": "^4.1.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	},
+	"dependencies": {
+		"@toon-format/toon": "^2.1.0"
+	}
+}

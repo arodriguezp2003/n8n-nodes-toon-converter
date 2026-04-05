@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="#1A1A2E" stroke="#E94560" stroke-width="2"/>
+  <text x="32" y="26" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#E94560">TOON</text>
+  <line x1="16" y1="31" x2="48" y2="31" stroke="#E94560" stroke-width="1.5" stroke-dasharray="2 2"/>
+  <text x="32" y="44" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#0F3460">JSON</text>
+  <path d="M26 35 L32 41 L38 35" stroke="#16C79A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M26 25 L32 19 L38 25" stroke="#16C79A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
