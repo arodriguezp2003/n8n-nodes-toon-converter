@@ -230,16 +230,16 @@ graph TB
         RL["Recursion Depth<br/>Limit (50)"]
         SV["Input Size<br/>Validation (10MB)"]
         FK["Forbidden Key<br/>Denylist"]
-        PI["Prompt Injection<br/>Sanitization"]
         SM["Safe Merge<br/>(no Object.assign)"]
+        SD["Static LLM Instruction<br/>(no injection surface)"]
     end
 
     style PP fill:#E94560,color:#fff
     style RL fill:#E94560,color:#fff
     style SV fill:#E94560,color:#fff
     style FK fill:#E94560,color:#fff
-    style PI fill:#E94560,color:#fff
     style SM fill:#E94560,color:#fff
+    style SD fill:#E94560,color:#fff
 ```
 
 | Threat | Mitigation |
@@ -248,7 +248,7 @@ graph TB
 | **Stack overflow (DoS)** | Recursion capped at depth 50. |
 | **Memory bomb** | Input size validated at 10MB before parsing. |
 | **Key injection** | Output field names validated against forbidden key denylist. |
-| **Prompt injection** | Backtick sequences sanitized in LLM instruction generation. |
+| **Prompt injection** | LLM instruction is fully static — no user data is embedded, eliminating the injection surface entirely. |
 | **Silent data mutation** | No quoted-string unwrapping — only `{...}` and `[...]` patterns are parsed. |
 
 ### Dependency audit
