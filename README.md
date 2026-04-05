@@ -144,7 +144,7 @@ Parses TOON text back into structured JSON data.
 |--------|:-------:|-------------|
 | **Keep Source Fields** | `true` | Preserve original input fields in the output |
 | **Auto-Parse Stringified JSON** | `false` | Detect and expand `JSON.stringify()`'d fields before encoding — lets TOON compress the inner structure |
-| **Include LLM Instructions** | `false` | Add `llmInputInstruction` and `llmOutputInstruction` fields with ready-to-use prompts |
+| **Include LLM Format Instruction** | `false` | Add a `llmInstruction` field that explains the TOON format to the LLM (format only, no data) |
 
 ---
 
@@ -200,16 +200,22 @@ flowchart TD
 
 ---
 
-## LLM Instructions
+## LLM Format Instruction
 
-When **Include LLM Instructions** is enabled, the node outputs two additional fields:
+When **Include LLM Format Instruction** is enabled, the node adds a `llmInstruction` field to the output. This is a **static, format-only explanation** of TOON syntax — it does NOT include any data.
 
-| Field | Purpose |
-|-------|---------|
-| `llmInputInstruction` | Tells the LLM *"the data you received is in TOON format, here's how to read it"* — includes a format reference and the actual data sample |
-| `llmOutputInstruction` | Tells the LLM *"respond in TOON format following these rules"* — includes syntax rules and formatting guidelines |
+Use it in your AI node's prompt **before** the TOON data:
 
-Use these in your AI node's system or user prompt to ensure the LLM understands the format.
+```
+{{ $json.llmInstruction }}
+
+Here is the data:
+{{ $json.toon }}
+
+Now analyze this data and...
+```
+
+The instruction teaches the LLM how to read TOON: objects, tabular arrays, primitive arrays, and type inference rules — with inline syntax examples.
 
 ---
 

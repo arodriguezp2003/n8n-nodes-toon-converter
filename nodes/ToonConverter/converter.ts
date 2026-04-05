@@ -98,41 +98,27 @@ export function convertToJson(toonText: string): unknown {
 }
 
 /**
- * Generate LLM instruction text explaining the input data format.
- * Tells the LLM: "The data you're about to receive is in TOON format, here's how to read it."
+ * Generate a format-only instruction telling the LLM how to read TOON data.
+ * Does NOT include the data itself — the user places the data separately in the prompt.
  */
-export function generateInputInstruction(toonSample?: string): string {
-	let instruction =
-		'The following data is provided in TOON (Token-Oriented Object Notation) format. ' +
-		'TOON is a compact, line-based format equivalent to JSON:\n' +
-		'- Objects use indented key-value pairs (key: value)\n' +
-		'- Tabular arrays declare fields once in the header, then list rows as CSV: key[N]{field1,field2}: followed by indented rows\n' +
-		'- Primitive arrays use: key[N]: val1,val2,...\n' +
-		'- Types are inferred: numbers, booleans (true/false), null, and strings (unquoted unless they contain special characters)\n' +
-		'Parse this TOON data as you would JSON — same data model, just fewer tokens.';
-
-	if (toonSample) {
-		// Sanitize backtick sequences to prevent breaking out of the fenced code block
-		const sanitized = toonSample.replace(/`{3,}/g, '` ` `');
-		instruction += '\n\nExample of the data format:\n```\n' + sanitized + '\n```';
-	}
-
-	return instruction;
-}
-
-/**
- * Generate LLM instruction text explaining the expected output format.
- * Tells the LLM: "Respond in TOON format following these rules."
- */
-export function generateOutputInstruction(): string {
+export function generateInputInstruction(): string {
 	return (
-		'Respond with your structured data in TOON (Token-Oriented Object Notation) format. Rules:\n' +
-		'- Objects: one key-value pair per line, nested with 2-space indentation (key: value)\n' +
-		'- Arrays of objects with the same fields: use tabular format — key[N]{field1,field2}: followed by indented CSV rows\n' +
-		'- Primitive arrays: key[N]: val1,val2,...\n' +
-		'- Strings only need quotes if they contain special characters (: , [ ] { }), look like numbers/booleans/null, or are empty\n' +
-		'- Do NOT wrap the output in code blocks or add any text outside the TOON data\n' +
-		'TOON is equivalent to JSON — same types (string, number, boolean, null, object, array) — just more compact.'
+		'The data provided below is in TOON (Token-Oriented Object Notation) format. ' +
+		'TOON is a compact, line-based notation equivalent to JSON. Here is how to read it:\n\n' +
+		'OBJECTS — key-value pairs, one per line. Nesting uses 2-space indentation:\n' +
+		'  name: Ada\n' +
+		'  address:\n' +
+		'    city: Buenos Aires\n\n' +
+		'TABULAR ARRAYS — arrays of uniform objects. Fields declared once in the header, rows as CSV:\n' +
+		'  users[3]{id,name,role}:\n' +
+		'    1,Ada,engineer\n' +
+		'    2,Bob,designer\n' +
+		'    3,Eve,analyst\n\n' +
+		'PRIMITIVE ARRAYS — inline with declared length:\n' +
+		'  tags[3]: foo,bar,baz\n\n' +
+		'TYPES — values are inferred: numbers (42, 3.14), booleans (true/false), null, and strings ' +
+		'(unquoted unless they contain special characters like : , [ ] { }).\n\n' +
+		'Treat the TOON data exactly as you would JSON — same data model, just fewer tokens.'
 	);
 }
 

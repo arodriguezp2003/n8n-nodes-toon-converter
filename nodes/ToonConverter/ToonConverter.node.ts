@@ -10,7 +10,6 @@ import {
 	convertToToon,
 	convertToJson,
 	generateInputInstruction,
-	generateOutputInstruction,
 	isForbiddenKey,
 	safeMerge,
 	validateInputSize,
@@ -265,14 +264,14 @@ export class ToonConverter implements INodeType {
 							'Only applies to "Convert to TOON".',
 					},
 					{
-						displayName: 'Include LLM Instructions',
+						displayName: 'Include LLM Format Instruction',
 						name: 'includeLlmInstructions',
 						type: 'boolean',
 						default: false,
 						description:
-							'Whether to include ready-to-use LLM instruction prompts in the output. ' +
-							'Adds "llmInputInstruction" (explains the TOON data format to the LLM) and ' +
-							'"llmOutputInstruction" (tells the LLM to respond in TOON format).',
+							'Whether to add a "llmInstruction" field explaining the TOON format to the LLM. ' +
+							'Place this instruction in your AI node\'s prompt before the TOON data so the LLM knows how to read it. ' +
+							'Only applies to "Convert to TOON".',
 					},
 				],
 			},
@@ -342,8 +341,7 @@ export class ToonConverter implements INodeType {
 					json[outputField] = toonString;
 
 					if (options.includeLlmInstructions) {
-						json.llmInputInstruction = generateInputInstruction(toonString);
-						json.llmOutputInstruction = generateOutputInstruction();
+						json.llmInstruction = generateInputInstruction();
 					}
 
 					returnData.push({ json, pairedItem: { item: i } });
