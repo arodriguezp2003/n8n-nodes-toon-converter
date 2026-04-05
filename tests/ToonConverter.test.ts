@@ -16,19 +16,19 @@ import {
 // ============================================================================
 describe('deepParseStringifiedJson', () => {
 	it('parses a stringified JSON object inside a string field', () => {
-		const input = { config: JSON.stringify({ theme: 'dark', lang: 'es' }) };
+		const input = { settings: JSON.stringify({ color: 'blue', size: 'large' }) };
 		const result = deepParseStringifiedJson(input) as any;
-		expect(result.config).toEqual({ theme: 'dark', lang: 'es' });
+		expect(result.settings).toEqual({ color: 'blue', size: 'large' });
 	});
 
 	it('parses a stringified JSON array inside a string field', () => {
-		const input = { items: JSON.stringify([1, 2, 3]) };
+		const input = { scores: JSON.stringify([10, 20, 30]) };
 		const result = deepParseStringifiedJson(input) as any;
-		expect(result.items).toEqual([1, 2, 3]);
+		expect(result.scores).toEqual([10, 20, 30]);
 	});
 
 	it('preserves double-stringified JSON as string (no quoted-string parsing)', () => {
-		const inner = { key: 'value' };
+		const inner = { flavor: 'vanilla' };
 		const doubleStringified = JSON.stringify(JSON.stringify(inner));
 		const input = { data: doubleStringified };
 		const result = deepParseStringifiedJson(input) as any;
@@ -37,7 +37,7 @@ describe('deepParseStringifiedJson', () => {
 	});
 
 	it('leaves non-JSON strings untouched', () => {
-		const input = { name: 'hello world', code: 'function() {}' };
+		const input = { greeting: 'good morning', snippet: 'for (;;) {}' };
 		const result = deepParseStringifiedJson(input) as any;
 		expect(result).toEqual(input);
 	});
@@ -58,18 +58,18 @@ describe('deepParseStringifiedJson', () => {
 		const input = {
 			level1: {
 				level2: {
-					payload: JSON.stringify({ deep: true }),
+					payload: JSON.stringify({ enabled: true }),
 				},
 			},
 		};
 		const result = deepParseStringifiedJson(input) as any;
-		expect(result.level1.level2.payload).toEqual({ deep: true });
+		expect(result.level1.level2.payload).toEqual({ enabled: true });
 	});
 
 	it('recursively parses inside arrays', () => {
-		const input = [JSON.stringify({ a: 1 }), JSON.stringify([1, 2])];
+		const input = [JSON.stringify({ x: 7 }), JSON.stringify([4, 5])];
 		const result = deepParseStringifiedJson(input) as any;
-		expect(result).toEqual([{ a: 1 }, [1, 2]]);
+		expect(result).toEqual([{ x: 7 }, [4, 5]]);
 	});
 
 	it('handles primitives passthrough', () => {
@@ -86,21 +86,21 @@ describe('deepParseStringifiedJson', () => {
 	});
 
 	it('handles JSON with special characters (commas, colons, quotes)', () => {
-		const inner = { msg: 'hello, world', note: 'has "quotes" and colons: yes' };
+		const inner = { greeting: 'hello, world', remark: 'has "quotes" and colons: yes' };
 		const input = { payload: JSON.stringify(inner) };
 		const result = deepParseStringifiedJson(input) as any;
 		expect(result.payload).toEqual(inner);
 	});
 
 	it('handles stringified JSON with nested arrays of objects', () => {
-		const inner = { items: [{ a: 1 }, { b: 2 }], count: 2 };
+		const inner = { products: [{ sku: 'A1' }, { sku: 'B2' }], total: 2 };
 		const input = { data: JSON.stringify(inner) };
 		const result = deepParseStringifiedJson(input) as any;
 		expect(result.data).toEqual(inner);
 	});
 
 	it('handles stringified JSON with unicode', () => {
-		const inner = { emoji: '🚀', text: '日本語テスト' };
+		const inner = { icon: '🌧️', city: '東京の天気' };
 		const input = { data: JSON.stringify(inner) };
 		const result = deepParseStringifiedJson(input) as any;
 		expect(result.data).toEqual(inner);
@@ -115,31 +115,31 @@ describe('deepParseStringifiedJson', () => {
 
 	it('handles mixed fields: some stringified, some not', () => {
 		const input = {
-			name: 'Ada',
-			age: 30,
-			config: JSON.stringify({ theme: 'dark' }),
-			tags: ['a', 'b'],
-			nested: { meta: JSON.stringify([1, 2, 3]) },
+			city: 'Tokyo',
+			population: 14000000,
+			weather: JSON.stringify({ condition: 'sunny' }),
+			districts: ['Shibuya', 'Shinjuku'],
+			nested: { forecast: JSON.stringify([22, 24, 19]) },
 		};
 		const result = deepParseStringifiedJson(input) as any;
-		expect(result.name).toBe('Ada');
-		expect(result.age).toBe(30);
-		expect(result.config).toEqual({ theme: 'dark' });
-		expect(result.tags).toEqual(['a', 'b']);
-		expect(result.nested.meta).toEqual([1, 2, 3]);
+		expect(result.city).toBe('Tokyo');
+		expect(result.population).toBe(14000000);
+		expect(result.weather).toEqual({ condition: 'sunny' });
+		expect(result.districts).toEqual(['Shibuya', 'Shinjuku']);
+		expect(result.nested.forecast).toEqual([22, 24, 19]);
 	});
 
 	it('handles stringified JSON containing newlines and tabs', () => {
-		const inner = { text: 'line1\nline2\ttab' };
+		const inner = { recipe: 'step1\nstep2\tstir' };
 		const input = { data: JSON.stringify(inner) };
 		const result = deepParseStringifiedJson(input) as any;
 		expect(result.data).toEqual(inner);
 	});
 
 	it('handles stringified JSON with leading/trailing whitespace', () => {
-		const input = { data: '  {"key":"value"}  ' };
+		const input = { data: '  {"flavor":"mint"}  ' };
 		const result = deepParseStringifiedJson(input) as any;
-		expect(result.data).toEqual({ key: 'value' });
+		expect(result.data).toEqual({ flavor: 'mint' });
 	});
 });
 
@@ -148,26 +148,26 @@ describe('deepParseStringifiedJson', () => {
 // ============================================================================
 describe('convertToToon', () => {
 	it('converts a simple object', () => {
-		const result = convertToToon({ name: 'Ada', age: 30 });
+		const result = convertToToon({ city: 'Berlin', population: 3748148 });
 		expect(typeof result).toBe('string');
-		expect(result).toContain('name: Ada');
-		expect(result).toContain('age: 30');
+		expect(result).toContain('city: Berlin');
+		expect(result).toContain('population: 3748148');
 	});
 
 	it('converts with autoParseJson=true', () => {
-		const data = { config: JSON.stringify({ theme: 'dark' }) };
+		const data = { weather: JSON.stringify({ condition: 'sunny' }) };
 		const withoutParse = convertToToon(data, false);
 		const withParse = convertToToon(data, true);
-		// Without parse: config is an escaped string in TOON
+		// Without parse: weather is an escaped string in TOON
 		expect(withoutParse).toContain('"');
-		// With parse: config is expanded as nested object
-		expect(withParse).toContain('config:');
-		expect(withParse).toContain('theme: dark');
+		// With parse: weather is expanded as nested object
+		expect(withParse).toContain('weather:');
+		expect(withParse).toContain('condition: sunny');
 	});
 
 	it('convertToJson parses TOON back', () => {
-		const result = convertToJson('name: Ada\nage: 30');
-		expect(result).toEqual({ name: 'Ada', age: 30 });
+		const result = convertToJson('city: Berlin\npopulation: 3748148');
+		expect(result).toEqual({ city: 'Berlin', population: 3748148 });
 	});
 });
 
@@ -176,21 +176,21 @@ describe('convertToToon', () => {
 // ============================================================================
 describe('TOON encode/decode round-trip', () => {
 	const cases: Array<{ name: string; data: unknown }> = [
-		{ name: 'simple object', data: { name: 'Ada', age: 30 } },
-		{ name: 'nested object', data: { user: { id: 1, address: { city: 'BA' } } } },
-		{ name: 'array of uniform objects', data: { rows: [{ id: 1, v: 'a' }, { id: 2, v: 'b' }] } },
-		{ name: 'primitive array', data: { tags: ['foo', 'bar', 'baz'] } },
+		{ name: 'simple object', data: { city: 'Berlin', population: 3748148 } },
+		{ name: 'nested object', data: { order: { id: 1, shipping: { country: 'DE' } } } },
+		{ name: 'array of uniform objects', data: { rows: [{ sku: 'A1', price: 9.99 }, { sku: 'B2', price: 14.50 }] } },
+		{ name: 'primitive array', data: { ingredients: ['flour', 'sugar', 'eggs'] } },
 		{ name: 'mixed array', data: { mix: [1, 'hello', true, null] } },
 		{ name: 'empty object', data: {} },
 		{ name: 'empty array', data: [] },
 		{ name: 'boolean', data: true },
 		{ name: 'number', data: 42 },
 		{ name: 'null', data: null },
-		{ name: 'unicode', data: { emoji: '🚀', cn: '你好' } },
+		{ name: 'unicode', data: { icon: '🌧️', greeting: '你好' } },
 		{ name: 'deep nesting', data: { a: { b: { c: { d: { e: 'deep' } } } } } },
 		{
 			name: 'field with stringified JSON (preserved as string)',
-			data: { config: '{"theme":"dark"}' },
+			data: { weather: '{"condition":"rainy"}' },
 		},
 	];
 
@@ -208,37 +208,37 @@ describe('TOON encode/decode round-trip', () => {
 // ============================================================================
 describe('stringified JSON field handling', () => {
 	it('without auto-parse: stringified JSON is preserved as opaque string', () => {
-		const input = { name: 'test', config: JSON.stringify({ theme: 'dark', lang: 'es' }) };
+		const input = { label: 'forecast', details: JSON.stringify({ tempC: 22, wind: 'NW' }) };
 		const toon = encode(input);
 		const decoded = decode(toon) as any;
-		expect(decoded.config).toBe('{"theme":"dark","lang":"es"}');
-		expect(typeof decoded.config).toBe('string');
+		expect(decoded.details).toBe('{"tempC":22,"wind":"NW"}');
+		expect(typeof decoded.details).toBe('string');
 	});
 
 	it('with auto-parse: stringified JSON is expanded before encoding', () => {
-		const input = { name: 'test', config: JSON.stringify({ theme: 'dark', lang: 'es' }) };
+		const input = { label: 'forecast', details: JSON.stringify({ tempC: 22, wind: 'NW' }) };
 		const parsed = deepParseStringifiedJson(input) as any;
 		const toon = encode(parsed);
 		const decoded = decode(toon) as any;
-		expect(decoded.config).toEqual({ theme: 'dark', lang: 'es' });
-		expect(typeof decoded.config).toBe('object');
+		expect(decoded.details).toEqual({ tempC: 22, wind: 'NW' });
+		expect(typeof decoded.details).toBe('object');
 	});
 
 	it('auto-parse produces structurally richer TOON for stringified data', () => {
 		const rows = [
-			{ id: 1, meta: JSON.stringify({ score: 10, level: 'high' }) },
-			{ id: 2, meta: JSON.stringify({ score: 20, level: 'low' }) },
+			{ sku: 'A1', specs: JSON.stringify({ weight: 500, color: 'red' }) },
+			{ sku: 'B2', specs: JSON.stringify({ weight: 300, color: 'blue' }) },
 		];
 		const withoutParse = encode(rows);
 		const withParse = encode(deepParseStringifiedJson(rows));
-		// Without parse: meta is an opaque escaped string
+		// Without parse: specs is an opaque escaped string
 		expect(withoutParse).toContain('"');
-		// With parse: meta becomes structured TOON (no escaped JSON strings)
+		// With parse: specs becomes structured TOON (no escaped JSON strings)
 		expect(withParse).not.toContain('\\"');
 	});
 
 	it('preserves double-stringified JSON in TOON (no quoted-string unwrapping)', () => {
-		const inner = { key: 'value' };
+		const inner = { flavor: 'vanilla' };
 		const doubleStringified = JSON.stringify(JSON.stringify(inner));
 		const input = { data: doubleStringified };
 		const parsed = deepParseStringifiedJson(input) as any;
@@ -248,8 +248,8 @@ describe('stringified JSON field handling', () => {
 
 	it('handles stringified JSON with special characters', () => {
 		const inner = {
-			msg: 'hello, world',
-			items: [{ a: 1 }, { b: 2 }],
+			greeting: 'hello, world',
+			ingredients: [{ name: 'flour' }, { name: 'sugar' }],
 			note: 'has "quotes" and colons: yes',
 		};
 		const input = { payload: JSON.stringify(inner) };
@@ -265,18 +265,18 @@ describe('stringified JSON field handling', () => {
 	});
 
 	it('handles tabular data where each row has a stringified JSON config', () => {
-		const users = [
-			{ id: 1, name: 'Ada', preferences: JSON.stringify({ theme: 'dark', notifications: true }) },
-			{ id: 2, name: 'Bob', preferences: JSON.stringify({ theme: 'light', notifications: false }) },
-			{ id: 3, name: 'Eve', preferences: JSON.stringify({ theme: 'auto', notifications: true }) },
+		const players = [
+			{ id: 1, name: 'Carlos', stats: JSON.stringify({ goals: 12, assists: 5 }) },
+			{ id: 2, name: 'Mika', stats: JSON.stringify({ goals: 8, assists: 11 }) },
+			{ id: 3, name: 'Priya', stats: JSON.stringify({ goals: 15, assists: 3 }) },
 		];
 
-		const parsed = deepParseStringifiedJson({ users }) as any;
-		expect(parsed.users[0].preferences).toEqual({ theme: 'dark', notifications: true });
+		const parsed = deepParseStringifiedJson({ players }) as any;
+		expect(parsed.players[0].stats).toEqual({ goals: 12, assists: 5 });
 		const toonParsed = encode(parsed);
 		const decoded = decode(toonParsed) as any;
-		expect(decoded.users[0].preferences).toEqual({ theme: 'dark', notifications: true });
-		expect(decoded.users[1].preferences).toEqual({ theme: 'light', notifications: false });
+		expect(decoded.players[0].stats).toEqual({ goals: 12, assists: 5 });
+		expect(decoded.players[1].stats).toEqual({ goals: 8, assists: 11 });
 	});
 });
 
@@ -285,7 +285,7 @@ describe('stringified JSON field handling', () => {
 // ============================================================================
 describe('full round-trip via converter functions', () => {
 	it('simple object survives round-trip', () => {
-		const original = { name: 'Ada', age: 30, active: true };
+		const original = { city: 'Berlin', population: 3748148, coastal: false };
 		const toon = convertToToon(original);
 		const result = convertToJson(toon);
 		expect(result).toEqual(original);
@@ -293,12 +293,12 @@ describe('full round-trip via converter functions', () => {
 
 	it('complex nested data survives round-trip', () => {
 		const original = {
-			users: [
-				{ id: 1, name: 'Ada', tags: ['eng', 'lead'], meta: { level: 5 } },
-				{ id: 2, name: 'Bob', tags: ['design'], meta: { level: 3 } },
+			products: [
+				{ sku: 'A1', name: 'Widget', tags: ['sale', 'new'], pricing: { amount: 9.99 } },
+				{ sku: 'B2', name: 'Gadget', tags: ['clearance'], pricing: { amount: 4.50 } },
 			],
 			count: 2,
-			active: true,
+			inStock: true,
 		};
 		const toon = convertToToon(original);
 		const result = convertToJson(toon);
@@ -308,23 +308,23 @@ describe('full round-trip via converter functions', () => {
 	it('stringified JSON fields survive round-trip without auto-parse', () => {
 		const original = {
 			id: 1,
-			config: JSON.stringify({ theme: 'dark', nested: { deep: true } }),
+			recipe: JSON.stringify({ servings: 4, steps: { first: 'preheat oven' } }),
 		};
 		const toon = convertToToon(original, false);
 		const result = convertToJson(toon) as any;
-		expect(typeof result.config).toBe('string');
-		expect(result.config).toBe(original.config);
+		expect(typeof result.recipe).toBe('string');
+		expect(result.recipe).toBe(original.recipe);
 	});
 
 	it('stringified JSON fields are expanded with auto-parse', () => {
 		const original = {
 			id: 1,
-			config: JSON.stringify({ theme: 'dark', nested: { deep: true } }),
+			recipe: JSON.stringify({ servings: 4, steps: { first: 'preheat oven' } }),
 		};
 		const toon = convertToToon(original, true);
 		const result = convertToJson(toon) as any;
-		expect(typeof result.config).toBe('object');
-		expect(result.config).toEqual({ theme: 'dark', nested: { deep: true } });
+		expect(typeof result.recipe).toBe('object');
+		expect(result.recipe).toEqual({ servings: 4, steps: { first: 'preheat oven' } });
 	});
 });
 
@@ -351,7 +351,7 @@ describe('edge cases', () => {
 	});
 
 	it('handles unicode', () => {
-		const original = { emoji: '🚀🎉', japanese: '日本語', arabic: 'مرحبا' };
+		const original = { icon: '🌧️🎵', japanese: '東京タワー', arabic: 'مرحبا' };
 		const toon = convertToToon(original);
 		const result = convertToJson(toon);
 		expect(result).toEqual(original);
@@ -360,8 +360,8 @@ describe('edge cases', () => {
 	it('handles large arrays efficiently (100 rows)', () => {
 		const rows = Array.from({ length: 100 }, (_, i) => ({
 			id: i,
-			name: `user_${i}`,
-			score: i * 1.5,
+			product: `item_${i}`,
+			price: i * 2.5,
 		}));
 		const toon = convertToToon(rows);
 		const jsonStr = JSON.stringify(rows);
@@ -392,24 +392,24 @@ describe('edge cases', () => {
 		const apiResponse = {
 			status: 'success',
 			data: {
-				users: [
-					{ id: 1, email: 'ada@test.com', profile: JSON.stringify({ bio: 'Engineer', links: ['github.com/ada'] }) },
-					{ id: 2, email: 'bob@test.com', profile: JSON.stringify({ bio: 'Designer', links: ['dribbble.com/bob'] }) },
+				orders: [
+					{ id: 1, customer: 'alice@shop.com', items: JSON.stringify({ product: 'Widget', qty: 3 }) },
+					{ id: 2, customer: 'bob@shop.com', items: JSON.stringify({ product: 'Gadget', qty: 1 }) },
 				],
 				pagination: { page: 1, total: 100, hasNext: true },
 			},
-			meta: { requestId: 'abc-123', timestamp: '2026-01-01T00:00:00Z' },
+			meta: { requestId: 'xyz-789', timestamp: '2026-01-01T00:00:00Z' },
 		};
 
-		// Without auto-parse: profile remains stringified
+		// Without auto-parse: items remains stringified
 		const toon1 = convertToToon(apiResponse, false);
 		const result1 = convertToJson(toon1) as any;
-		expect(typeof result1.data.users[0].profile).toBe('string');
+		expect(typeof result1.data.orders[0].items).toBe('string');
 
-		// With auto-parse: profile is expanded
+		// With auto-parse: items is expanded
 		const toon2 = convertToToon(apiResponse, true);
 		const result2 = convertToJson(toon2) as any;
-		expect(result2.data.users[0].profile).toEqual({ bio: 'Engineer', links: ['github.com/ada'] });
+		expect(result2.data.orders[0].items).toEqual({ product: 'Widget', qty: 3 });
 	});
 
 	it('handles values that look like JSON but contain trailing content', () => {
@@ -503,10 +503,10 @@ describe('security: prototype pollution prevention', () => {
 	});
 
 	it('deepParseStringifiedJson blocks __proto__ inside stringified JSON', () => {
-		const payload = JSON.stringify({ __proto__: { isAdmin: true }, name: 'test' });
+		const payload = JSON.stringify({ __proto__: { isAdmin: true }, name: 'weather-api' });
 		const input = { data: payload };
 		const result = deepParseStringifiedJson(input) as any;
-		expect(result.data.name).toBe('test');
+		expect(result.data.name).toBe('weather-api');
 		expect(result.data.__proto__).toBeUndefined();
 		expect(({} as any).isAdmin).toBeUndefined();
 	});
@@ -536,19 +536,19 @@ describe('security: prototype pollution prevention', () => {
 		expect(isForbiddenKey('__proto__')).toBe(true);
 		expect(isForbiddenKey('constructor')).toBe(true);
 		expect(isForbiddenKey('prototype')).toBe(true);
-		expect(isForbiddenKey('name')).toBe(false);
+		expect(isForbiddenKey('city')).toBe(false);
 		expect(isForbiddenKey('data')).toBe(false);
 		expect(isForbiddenKey('toon')).toBe(false);
 	});
 
 	it('TOON decode + safeMerge does not pollute prototype', () => {
 		// Build TOON text that contains a __proto__ key manually
-		const toonText = '__proto__:\n  polluted: true\nname: Ada';
+		const toonText = '__proto__:\n  polluted: true\ncity: Berlin';
 		const parsed = decode(toonText) as Record<string, unknown>;
 		const target: Record<string, unknown> = {};
 		safeMerge(target, parsed);
 		expect(({} as any).polluted).toBeUndefined();
-		expect(target.name).toBe('Ada');
+		expect(target.city).toBe('Berlin');
 		// __proto__ from TOON should be blocked
 		expect(Object.hasOwn(target, '__proto__')).toBe(false);
 	});
@@ -632,7 +632,7 @@ describe('security: no silent string mutation via quoted-string parsing', () => 
 	});
 
 	it('does not parse double-stringified JSON (starts with quote)', () => {
-		const doubleStr = JSON.stringify(JSON.stringify({ key: 'value' }));
+		const doubleStr = JSON.stringify(JSON.stringify({ flavor: 'vanilla' }));
 		const input = { data: doubleStr };
 		const result = deepParseStringifiedJson(input) as any;
 		// Should be preserved as-is since it starts with "

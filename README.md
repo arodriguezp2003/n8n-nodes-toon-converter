@@ -13,7 +13,7 @@
   <a href="https://www.npmjs.com/package/n8n-nodes-toon-converter"><img src="https://img.shields.io/npm/v/n8n-nodes-toon-converter.svg?style=flat-square&color=cb3837" alt="npm version" /></a>
   <a href="https://github.com/arodriguezp2003/n8n-nodes-toon-converter/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/arodriguezp2003/n8n-nodes-toon-converter/ci.yml?style=flat-square&label=tests" alt="CI" /></a>
   <img src="https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square" alt="Coverage 100%" />
-  <img src="https://img.shields.io/badge/tests-79%20passed-brightgreen?style=flat-square" alt="79 tests passed" />
+  <img src="https://img.shields.io/badge/tests-80%20passed-brightgreen?style=flat-square" alt="80 tests passed" />
   <img src="https://img.shields.io/badge/security-hardened-blue?style=flat-square" alt="Security Hardened" />
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-yellow?style=flat-square" alt="MIT License" /></a>
   <img src="https://img.shields.io/badge/n8n-community%20node-ff6d5a?style=flat-square" alt="n8n community node" />
@@ -261,7 +261,7 @@ graph TB
 
 ## Test Suite
 
-**79 tests** | **100% coverage** | **0 vulnerabilities**
+**80 tests** | **100% coverage** | **0 vulnerabilities**
 
 ```
  % Coverage report from v8
@@ -386,7 +386,7 @@ n8n-nodes-toon-converter/
   icons/
     toon.svg                  # Node icon
   tests/
-    ToonConverter.test.ts     # 79 tests (functional + security)
+    ToonConverter.test.ts     # 80 tests (functional + security)
   docs/                       # Extended documentation
   .github/workflows/
     ci.yml                    # Test + typecheck + coverage
@@ -423,7 +423,7 @@ git clone https://github.com/arodriguezp2003/n8n-nodes-toon-converter.git
 cd n8n-nodes-toon-converter
 npm install --ignore-scripts
 npm run build    # Compile TypeScript
-npm test         # Run 79 tests
+npm test         # Run 80 tests
 ```
 
 ---
