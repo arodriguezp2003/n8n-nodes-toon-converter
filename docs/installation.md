@@ -70,4 +70,4 @@ After restarting n8n, search for **"TOON"** in the node panel. You should see th
 ## Requirements
 
 - n8n v1.0.0 or later
-- Node.js v18 or later
+- Node.js v20 or later

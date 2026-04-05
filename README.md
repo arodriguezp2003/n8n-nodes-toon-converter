@@ -287,12 +287,12 @@ All files     │     100 │      100 │     100 │     100
 
 ### CI Pipeline
 
-Tests run on every push and PR via GitHub Actions across **Node.js 18, 20, and 22**:
+Tests run on every push and PR via GitHub Actions across **Node.js 20 and 22**:
 
 ```yaml
 # .github/workflows/ci.yml
 jobs:
-  test:       # Runs tests on Node 18, 20, 22
+  test:       # Runs tests on Node 20, 22
   coverage:   # Generates coverage report
   typecheck:  # Strict TypeScript validation
 ```
