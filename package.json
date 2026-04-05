@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-toon-converter",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "n8n community node to convert between JSON and TOON (Token-Oriented Object Notation) — optimized for LLM token efficiency",
 	"license": "MIT",
 	"homepage": "https://github.com/arodriguezp2003/n8n-nodes-toon-converter",
